@@ -1,0 +1,70 @@
+Mini "dokumentacja" Projektu nr 1 na GK
+Autor: Łukasz Komoszyński 305932
+
+========= Klawiszologia =========
+  - Select element  - przesuwanie wierzchołków, okręgów, krawędzi oraz zmiana promienia okręgu; najechanie na
+                      wierzchołek/krawędź zmienia jej kolor, a przytrzymując myszkę można go przesuwać
+
+  - Select Figure   - przesuwanie całych wielokątów/okręgów; po najechaniu myszką obiekt zmieni
+                      kolor na czerwony, a przytrzymując myszkę można go przesuwać
+
+  - Add Polygon     - dodawanie wielokątów; kolejne wierzchołki dodajemy poprzez klikanie
+                      na obszarze z rysunkami; kończymy dodawanie wielokątu wciskając "ESC"
+
+  - Add Circle      - dodawanie okręgów; przy wciśnięciu przycisku wybieramy środek
+                      nowego okręgu 
+
+  - Split Edge      - podział krawędzi; klikając na krawędź dodajemy wierzchołek w jej środku i usuwamy z niej
+                      ograniczenia
+
+  - Delete Element  - usuwanie wierzchołków/okręgów; usunięcia wierzchołka usuwa ograniczenia na przylegających
+                      krawędziach oraz na okregach stycznych do usuwanych krawędzi
+
+  - Delete figure   - usuwanie całych figur; usunięcie wielkąta usuwa ograniczenia na stycznych okręgach
+
+
+Ograniczenia UWAGA - można je dodawać tylko gdy obiekt nie ma jeszcze ograniczenia
+
+  - Constant Edge   - Stała długość krawędzi; po kliknięciu na krawędź tworzone jest ograniczenie równe długości 
+		      tej krawędzi, aby zmienić długość krawędzi w ograniczeniu należy dwukrotnie kliknąć na
+                      krawędź mając wybrane "Select Element"
+
+  - Block Center    - po kliknięciu na okrąg nie da się go przesunąć
+
+  - Constant Radius - po kliknięciu na okrąg jego promień ma stałą długość, można ją zmienić wybierając "Select
+                      Element" i klikając na okrąg dwukrotnie
+
+  - Equal Edges     - ograniczenie na dwie równe krawędzie; należy kliknąć na dwie krawędzie tego samego wielokąta
+
+  - Parallel Edges  - ograniczenie na dwie krawędzie równoległe; należy kliknąć na dwie niesąsiadujące krawędzie
+                      tego samego wielokąta
+
+  - Circle Tangent  - ograniczenie na okrąg styczny do prostej opisanej przez krawędź; najpierw należy kliknąć na
+                      okrąg, a potem na krawędź
+
+  - Remove Constraint - usuwanie ograniczenia; kliknięcie na okrąg/krawędź usuwa ograniczeni stworzone na niej i 
+			powiązane z nią
+
+========= Działanie algorytmu ========= 
+Założenie: Algorytm dąży do jak najlepszego odwzorowania ograniczeń
+
+Po przesunięciu wierzchołków wielokąta/dodaniu nowego ograniczenia na wielokąt wykonywany jest algorytm na
+wielokąciei jego ograniczeniach
+
+ 1. Obliczamy sumaryczny błąd (jak bardzo ograniczenia nie są spełnione) ograniczeń.
+ 2. Dla każdego wierzchołka -
+	3. obliczamy zmianę błędu przy małej zmianie współrzędnej x i małej zmianie współrzędnej y
+	4. z tego liczymy stosunek wartości błędu do pochodnej błęd dla każdej ze współrzędnych
+	5. obcinamy obliczony stosunek do niedużej wartości (-2, 2) i dzielimy przez 1000
+	6. przesuwamy wierzchołek o obliczoną wartość dla obu współrzędnych
+ 7. liczymy nowy sumaryczny błąd i pamiętamy poprzedni
+ 8. jeżeli już 10 razy różnica między poprzednim a aktualnym błędem była mniejsza niż eps to kończymy algorytm
+ 9. Jeżeli 2-7 nie wykonaliśmy jeszcze 1500 razy to wracamy do 2.
+
+Powyższy algorytm odnosi się wyłącznie do relacji wielokąta, ponieważ relacje okręgu:
+	1. blokują zmianę środka/promienia
+	2. lub mogą być zawsze wykonane zmieniając promień na odległość środka okręgu od prostej przechodzącej
+	   przez 2 punkty
+
+Jeżeli okrąg ma relację styczności z krawędzią jakiegoś wielokąta to po zmianie wielokąta aktualizowane sa promienie
+stycznych okręgów
